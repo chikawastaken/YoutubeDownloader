@@ -1,6 +1,5 @@
-from flask import Flask, render_template, request, Response
 import yt_dlp
-import subprocess
+from flask import Flask, render_template, request, Response
 
 app = Flask(__name__)
 
@@ -13,7 +12,7 @@ def download():
     url = request.form['url']
     resolution = request.form['resolution']
 
-    # Resolution mapping to yt-dlp format codes
+    # Resolution mapping
     resolution_map = {
         "360p": "18",
         "480p": "135+140",
@@ -21,35 +20,28 @@ def download():
         "1080p": "137+140"
     }
     
-    format_code = resolution_map.get(resolution, "18")  # Default to 360p
+    format_code = resolution_map.get(resolution, "18")
 
-    # Get video title
-    with yt_dlp.YoutubeDL({'quiet': True}) as ydl:
+    # yt-dlp options with cookies
+    ydl_opts = {
+        'format': format_code,
+        'noplaylist': True,
+        'quiet': True,
+        'cookies': 'youtube_cookies.txt'  # <-- Use cookies file
+    }
+
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info_dict = ydl.extract_info(url, download=False)
         title = info_dict.get('title', 'video')
 
     filename = f"{title}_{resolution}.mp4"
 
-    # Command to download and stream video with additional options
-    cmd = [
-        "yt-dlp",
-        "--youtube-skip-dash-manifest",
-        "--no-check-certificate",
-        "--geo-bypass",
-        "--extractor-retries", "5",
-        "--force-generic-extractor",
-        "-f", format_code,
-        "-o", "-",
-        url
-    ]
-
     def generate():
-        """ Stream video data in chunks to user. """
-        process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
-        for chunk in iter(lambda: process.stdout.read(4096), b""):
-            yield chunk
-        process.stdout.close()
-        process.wait()
+        """Stream video to user"""
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            proc = ydl.popen(['-f', format_code, '-o', '-'], stdout=yt_dlp.PIPE)
+            for chunk in iter(lambda: proc.stdout.read(4096), b""):
+                yield chunk
 
     return Response(generate(), content_type="video/mp4", headers={
         "Content-Disposition": f"attachment; filename={filename}"
