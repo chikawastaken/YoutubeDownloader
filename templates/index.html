@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Downloader</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 100px auto;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .search-box {
+            display: flex;
+            align-items: center;
+            border: 2px solid #ff007f;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .search-box input {
+            flex-grow: 1;
+            padding: 10px;
+            border: none;
+            outline: none;
+            font-size: 16px;
+        }
+        .search-box select {
+            padding: 10px;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            background-color: #fff;
+            cursor: pointer;
+        }
+        .search-box button {
+            background-color: #ff007f;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .search-box button:hover {
+            background-color: #ffc0cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ichika YouTube Video Downloader</h1>
+        <form action="/download" method="post">
+            <div class="search-box">
+                <input type="text" name="url" placeholder="Search or paste link here" required>
+                <select name="resolution">
+                    <option value="360p">360p</option>
+                    <option value="480p">480p</option>
+                    <option value="720p">720p</option>
+                    <option value="1080p">1080p</option>
+                </select>
+                <button type="submit">▶</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
