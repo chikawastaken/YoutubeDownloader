@@ -30,11 +30,16 @@ def download():
 
     filename = f"{title}_{resolution}.mp4"
 
-    # Command to download and stream video
+    # Command to download and stream video with additional options
     cmd = [
         "yt-dlp",
+        "--youtube-skip-dash-manifest",
+        "--no-check-certificate",
+        "--geo-bypass",
+        "--extractor-retries", "5",
+        "--force-generic-extractor",
         "-f", format_code,
-        "-o", "-",  # Output to stdout
+        "-o", "-",
         url
     ]
 
@@ -51,4 +56,4 @@ def download():
     })
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)  # Allows access from other devices
+    app.run(host="0.0.0.0", port=8080, debug=True)
