@@ -3,30 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube Downloader</title>
+    <title>Ichika YouTube Downloader</title>
+    <link rel="icon" href="https://www.youtube.com/favicon.ico" type="image/x-icon">
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background-color: #fff;
+            background-color: #0d47a1;
             margin: 0;
             padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
         }
         .container {
-            width: 100%;
-            max-width: 600px;
-            margin: 100px auto;
+            width: 90%;
+            max-width: 500px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            color: black;
         }
         h1 {
+            color: #0d47a1;
             font-size: 24px;
-            margin-bottom: 20px;
         }
         .search-box {
             display: flex;
             align-items: center;
-            border: 2px solid #ff007f;
-            border-radius: 5px;
+            border: 2px solid #0d47a1;
+            border-radius: 30px;
             overflow: hidden;
+            margin-top: 15px;
+            background: white;
+            padding: 5px;
         }
         .search-box input {
             flex-grow: 1;
@@ -34,43 +49,66 @@
             border: none;
             outline: none;
             font-size: 16px;
-        }
-        .search-box select {
-            padding: 10px;
-            border: none;
-            outline: none;
-            font-size: 16px;
-            background-color: #fff;
-            cursor: pointer;
+            border-radius: 30px;
         }
         .search-box button {
-            background-color: #ff007f;
+            background-color: black;
             color: white;
             border: none;
             padding: 10px 20px;
             cursor: pointer;
             font-size: 16px;
+            border-radius: 20px;
+            margin-left: 10px;
         }
         .search-box button:hover {
-            background-color: #ffc0cb;
+            background-color: #333;
+        }
+        .resolution-box {
+            display: none;
+            margin-top: 15px;
+        }
+        #loading {
+            display: none;
+            margin-top: 15px;
+            font-size: 16px;
+            color: #0d47a1;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Ichika YouTube Video Downloader</h1>
-        <form action="/download" method="post">
+        <form id="downloadForm" action="/download" method="post" onsubmit="showLoading()">
             <div class="search-box">
-                <input type="text" name="url" placeholder="Search or paste link here" required>
+                <input type="text" id="urlInput" name="url" placeholder="Paste YouTube link here" required oninput="showResolution()">
+                <button type="submit">Convert</button>
+            </div>
+            <div class="resolution-box" id="resolutionBox">
+                <label for="resolution">Select Resolution:</label>
                 <select name="resolution">
                     <option value="360p">360p</option>
                     <option value="480p">480p</option>
                     <option value="720p">720p</option>
                     <option value="1080p">1080p</option>
                 </select>
-                <button type="submit">▶</button>
             </div>
         </form>
+        <div id="loading">Downloading... Please wait.</div>
     </div>
+    <script>
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+        }
+        function showResolution() {
+            const urlInput = document.getElementById('urlInput');
+            const resolutionBox = document.getElementById('resolutionBox');
+            if (urlInput.value.trim().length > 0) {
+                resolutionBox.style.display = 'block';
+            } else {
+                resolutionBox.style.display = 'none';
+            }
+        }
+    </script>
 </body>
 </html>
